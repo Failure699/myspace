@@ -1,0 +1,2 @@
+# myspace
+for my friend
