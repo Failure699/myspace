@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>斯特克，生日快乐！✨</title>
+    <style>
+        /* 使用更稳固的变量布局 */
+        :root {
+            --primary: #ff7675;
+            --secondary: #74b9ff;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            /* 改用 vh 单位，确保在预览器中也能垂直居中 */
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* 动态背景小球 */
+        .bg-decoration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* 祝福卡片 */
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            text-align: center;
+            z-index: 10;
+            max-width: 350px;
+            width: 85%;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            border: 4px solid #fff;
+        }
+
+        .card:hover {
+            transform: translateY(-10px) scale(1.02);
+        }
+
+        .icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .content h1 {
+            color: var(--primary);
+            font-size: 28px;
+            margin: 10px 0;
+        }
+
+        .content p {
+            color: #555;
+            line-height: 1.8;
+            font-size: 16px;
+        }
+
+        .btn-tip {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 8px 20px;
+            background: var(--primary);
+            color: white;
+            border-radius: 20px;
+            font-size: 14px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        #canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-decoration" id="bg"></div>
+    <canvas id="canvas"></canvas>
+
+    <div class="card" onclick="celebrate()">
+        <span class="icon">🎁</span>
+        <div class="content">
+            <h1>斯特克，生日快乐！</h1>
+            <p>
+                愿你前路浩灿，万事胜意<br>
+                所有美好如期而至<br>
+                🎂✨🌟
+            </p>
+            <div class="btn-tip">点开惊喜</div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script>
+        // 自动背景装饰
+        const bg = document.getElementById('bg');
+        for(let i=0; i<20; i++) {
+            const dot = document.createElement('div');
+            dot.style.cssText = `
+                position: absolute;
+                width: ${Math.random()*20+10}px;
+                height: ${Math.random()*20+10}px;
+                background: rgba(255,255,255,0.4);
+                border-radius: 50%;
+                left: ${Math.random()*100}%;
+                top: ${Math.random()*100}%;
+                filter: blur(2px);
+            `;
+            bg.appendChild(dot);
+        }
+
+        function celebrate() {
+            // 触发礼花
+            const duration = 3 * 1000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({
+                    particleCount: 5,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: ['#ff7675', '#74b9ff']
+                });
+                confetti({
+                    particleCount: 5,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: ['#ff7675', '#74b9ff']
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+
+            // 改变文字
+            document.querySelector('h1').innerText = "Happy Birthday!";
+            document.querySelector('.icon').innerText = "🎂";
+            document.querySelector('.btn-tip').style.display = "none";
+        }
+    </script>
+</body>
+</html>
